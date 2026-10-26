@@ -49,20 +49,16 @@ const processData = ((gameMode) => {
 
     // Get a price for each item in the items list
     for (const itemId in filteredTarkovDevItems)
-    {
-        // Skip items that aren't in SPTs item database, this tends to be presets
-        if (!sptItems[itemId])
-        {
-            continue;
-        }
+{
+    const itemPrice = filteredTarkovDevItems[itemId];
 
-        const itemPrice = filteredTarkovDevItems[itemId];
-        if (itemPrice.Average24hPrice)
-        {
-            if (DEBUG) console.log(`[${gameMode}] Adding item: ${itemPrice.TemplateId} ${itemPrice.Name} -> ${itemPrice.Average24hPrice}`);
-            priceList[itemId] = itemPrice.Average24hPrice;
-        }
+    // Include every Tarkov.dev item with a valid flea price
+    if (itemPrice.Average24hPrice)
+    {
+        if (DEBUG) console.log(`[${gameMode}] Adding item: ${itemPrice.TemplateId} ${itemPrice.Name} -> ${itemPrice.Average24hPrice}`);
+        priceList[itemId] = itemPrice.Average24hPrice;
     }
+}
 
     // Ammo packs are easy to exploit, they're never listed on flea which causes server to use handbook price, often contain ammo worth x100 the cost of handbook price
     const ammoPacks = Object.values(sptItems)
